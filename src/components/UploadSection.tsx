@@ -14,7 +14,7 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
       setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
-      
+
       // Create preview URLs for images
       filesArray.forEach(file => {
         if (file.type.startsWith('image/')) {
@@ -40,25 +40,61 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
     }
 
     setValidationStatus('validating');
-    
-    // Aqui você implementaria a integração real com uma API de IA para validação de documentos
-    // Por enquanto, vamos simular uma validação após 2 segundos
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simule um resultado de validação bem-sucedido
-      setValidationStatus('success');
-      onDocumentsValidated(true, {
-        documentType: 'RG/CPF',
-        validationDate: new Date().toISOString(),
-        documentCount: selectedFiles.length
-      });
+      const results = await Promise.all(
+        selectedFiles.map(async (file) => {
+          const text = await extractTextFromFile(file);
+          const cpfMatch = text.match(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/);
+          const rgMatch = text.match(/\d{1,2}\.?\d{3}\.?\d{3}-?[A-Z0-9]?/);
+
+          return {
+            fileName: file.name,
+            text,
+            cpf: cpfMatch ? cpfMatch[0] : null,
+            rg: rgMatch ? rgMatch[0] : null,
+          };
+        })
+      );
+
+      const hasValidDocument = results.some(res => res.cpf || res.rg);
+
+      if (hasValidDocument) {
+        setValidationStatus('success');
+        onDocumentsValidated(true, {
+          documentCount: selectedFiles.length,
+          documents: results,
+        });
+      } else {
+        throw new Error('Nenhum CPF ou RG detectado');
+      }
+
     } catch (error) {
       setValidationStatus('error');
-      setErrorMessage('Falha na validação dos documentos. Por favor, tente novamente.');
+      setErrorMessage('Falha na validação dos documentos. Verifique se o conteúdo está legível.');
       onDocumentsValidated(false);
     }
+
   };
+
+  const extractTextFromFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('language', 'por');
+    formData.append('isOverlayRequired', 'false');
+
+    const response = await fetch('https://api.ocr.space/parse/image', {
+      method: 'POST',
+      headers: {
+        apikey: 'K88116183188957',
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+    return result.ParsedResults?.[0]?.ParsedText || '';
+  };
+
 
   const renderDocumentsList = () => {
     if (selectedFiles.length === 0) {
@@ -85,7 +121,7 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
                 Remover
               </button>
             </div>
-            
+
             {file.type.startsWith('image/') && previewUrls[index] && (
               <div className="h-40 overflow-hidden rounded border bg-white flex items-center justify-center">
                 <img
@@ -95,7 +131,7 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
                 />
               </div>
             )}
-            
+
             {!file.type.startsWith('image/') && (
               <div className="h-40 bg-gray-200 rounded flex items-center justify-center">
                 <span className="text-gray-600">
@@ -103,7 +139,7 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
                 </span>
               </div>
             )}
-            
+
             <div className="text-sm text-gray-500 mt-2">
               {(file.size / 1024 / 1024).toFixed(2)} MB
             </div>
@@ -154,13 +190,12 @@ const UploadSection: React.FC<UploadSectionProps> = ({ onDocumentsValidated }) =
           type="button"
           onClick={validateDocuments}
           disabled={selectedFiles.length === 0 || validationStatus === 'validating'}
-          className={`w-full cursor-pointer py-2 px-4 rounded-md ${
-            validationStatus === 'validating'
+          className={`w-full cursor-pointer py-2 px-4 rounded-md ${validationStatus === 'validating'
               ? 'bg-gray-400 cursor-not-allowed'
               : validationStatus === 'success'
-              ? 'bg-green-600 hover:bg-green-700'
-              : 'bg-blue-600 hover:bg-blue-700'
-          } text-white font-medium`}
+                ? 'bg-green-600 hover:bg-green-700'
+                : 'bg-blue-600 hover:bg-blue-700'
+            } text-white font-medium`}
         >
           {validationStatus === 'validating' ? (
             <span className="flex items-center justify-center">

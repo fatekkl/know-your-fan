@@ -47,12 +47,7 @@ const Home: React.FC = () => {
   };
 
   const renderProgressBar = () => {
-    const steps = [
-      { number: 1, label: 'Dados Pessoais', completed: formCompleted },
-      { number: 2, label: 'Documentos', completed: documentsValidated },
-      { number: 3, label: 'Redes Sociais', completed: socialLinksSubmitted },
-      { number: 4, label: 'Finalizar', completed: currentStep > 4 }
-    ];
+    
 
     return (
       <div className="mb-8">
