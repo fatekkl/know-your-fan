@@ -1,54 +1,74 @@
-# React + TypeScript + Vite
+## 📄 Documentação do Projeto – Desafio FURIA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 🧠 Sobre o Projeto
 
-Currently, two official plugins are available:
+Este projeto foi desenvolvido como resposta ao desafio da FURIA e tem como objetivo criar uma solução integrada que:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Coleta dados pessoais e comportamentais do usuário.
+- Valida documentos de identificação utilizando inteligência artificial (OCR).
+- Integra perfis de redes sociais com leitura de interações e páginas relacionadas a e-sports.
 
-## Expanding the ESLint configuration
+A aplicação foi construída como uma **landing page** usando **React**, **Tailwind CSS** e **TypeScript**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 🚀 Funcionalidades
+
+- [x] Formulário de cadastro com campos para nome, CPF, endereço, interesses e histórico de eventos/compras.
+- [x] Upload de documentos com suporte a **JPG, PNG e PDF**.
+- [x] Validação automática de RG/CPF via **OCR.space**.
+- [x] Integração de redes sociais e leitura de páginas seguidas/interações.
+- [x] Validação de links externos de e-sports via OCR/AI.
+
+---
+
+### 💻 Tecnologias Utilizadas
+
+- React
+- TypeScript
+- Tailwind CSS
+- OCR.space API (para validação por AI)
+- Vite (recomendado para build)
+
+---
+
+### 🛠️ Como Rodar Localmente
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/fatekkl/seu-repo.git
+cd seu-repo
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Instale as dependências:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Crie um arquivo `.env` na raiz com sua chave da OCR.space:
+
+```env
+VITE_OCR_API_KEY=sua-chave-aqui
+```
+
+Decidi não fazer isso no processo, pra facilitar a clonagem do repositório caso seja necessário. Mas em um projeto real, é INVIAVEL, fazer dessa forma.
+Então caso, você clone este repositório, não precisa criar o .env, pois uma chave de API já esta inserida hardcoded
+
+
+4. Rode o projeto:
+
+```bash
+npm run dev
+```
+
+---
+
+### 🔐 Observação sobre a Validação de Documentos
+
+A validação é feita localmente via OCR.space. A imagem/PDF é analisado e o texto extraído passa por expressões regulares para encontrar padrões válidos de **CPF** e **RG**. Nenhum dado sensível é armazenado.
+
+---
+
+
