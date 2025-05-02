@@ -38,13 +38,26 @@ const Home: React.FC = () => {
     setCurrentStep(4); // Final summary step
   };
 
-  const handleFinish = () => {
-    // Here you would typically send all the data to your backend
+  const handleFinish = async () => {
     console.log('All data collected:', userData);
     
-    // Show success message or redirect
-    setCurrentStep(5);
+    try {
+      const response = await fetch('http://localhost:5000/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+  
+      if (!response.ok) throw new Error('Erro ao salvar');
+  
+      const data = await response.json();
+      console.log('Salvo com sucesso, ID:', data.id);
+      setCurrentStep(5);
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+    }
   };
+  
 
   const renderProgressBar = () => {
     
