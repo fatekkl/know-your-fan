@@ -29,6 +29,8 @@ A aplicação foi construída como uma **landing page interativa** utilizando **
 * **TypeScript**
 * **Tailwind CSS**
 * **OCR.space API** (validação de documentos)
+* **SQLITE** (banco de dados)
+* **Express** (servidor)
 * **Vite** (empacotador recomendado)
 
 ---
@@ -38,8 +40,8 @@ A aplicação foi construída como uma **landing page interativa** utilizando **
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/fatekkl/seu-repo.git
-cd seu-repo
+git clone https://github.com/fatekkl/know-your-fan.git
+cd know-your-fan
 ```
 
 2. Instale as dependências:
