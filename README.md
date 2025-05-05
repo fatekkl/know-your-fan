@@ -64,6 +64,12 @@ VITE_OCR_API_KEY=sua-chave-aqui
 npm run dev
 ```
 
+5. Inicie o servidor express:
+
+```bash
+node server.js
+```
+
 ---
 
 ### 🔐 Sobre a Validação de Documentos
