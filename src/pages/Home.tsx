@@ -11,6 +11,10 @@ const Home: React.FC = () => {
   const [formCompleted, setFormCompleted] = useState(false);
   const [documentsValidated, setDocumentsValidated] = useState(false);
   const [socialLinksSubmitted, setSocialLinksSubmitted] = useState(false);
+
+  console.log(formCompleted)
+  console.log(documentsValidated)
+  console.log(socialLinksSubmitted)
   
   const [userData, setUserData] = useState<{
     fanData?: FanFormData;
